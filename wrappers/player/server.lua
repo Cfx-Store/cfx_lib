@@ -1,8 +1,14 @@
 cfx.player = {}
 
 ---@param source number|string
-function cfx.player.getIdentifierFromSource(source)
-	local identifier = GetPlayerIdentifierByType(tostring(source), SharedConfig.primaryIdentifier or "license")
+---@param keepPrefix? boolean
+function cfx.player.getIdentifierFromSource(source, keepPrefix)
+	local identifierType = SharedConfig.primaryIdentifier or "license"
+	local identifier = GetPlayerIdentifierByType(tostring(source), identifierType)
+	if not keepPrefix then
+		identifier = identifier:gsub("license:", "")
+	end
+
 	return identifier
 end
 
