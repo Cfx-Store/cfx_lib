@@ -77,3 +77,4 @@ local cfx = setmetatable({
 })
 
 _ENV.cfx = cfx
+require = cfx.require

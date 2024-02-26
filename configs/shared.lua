@@ -13,4 +13,4 @@ SharedConfig.framework = "auto" -- 'ESX' | 'QB' | 'auto'
 SharedConfig.target = "auto" -- 'ox_target' | 'qb_target' | 'qtarget' | 'auto'
 
 ---@type InventorySystem
-SharedConfig.inventory = "auto" -- 'ox_target' | 'qb_target' | 'qtarget' | 'auto'
+SharedConfig.inventory = "auto" -- 'ox_inventory' | 'qb-inventory'

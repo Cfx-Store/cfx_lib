@@ -6,17 +6,69 @@ function cfx.player.getIdentifierFromSource(source)
 	return identifier
 end
 
-local function getFromId_ESX(source)
-	local xPlayer = ESX.GetPlayerFromId(source)
-	return xPlayer
+---------------
+-- getFromId --
+---------------
+
+Player = {}
+Player.__index = Player
+
+function Player:new(source)
+	local player = setmetatable({}, self)
+	local getFrameworkPlayer = cfx.caller.createFrameworkCaller({
+		["ESX"] = function()
+			return ESX.GetPlayerFromId(source)
+		end,
+		["QB"] = function()
+			return QB.Functions.GetPlayer(source)
+		end
+	})
+
+	player.frameworkPlayer = getFrameworkPlayer()
+	return player
+end
+
+---@param account AccountType
+---@param amount number
+---@param reason? string
+function Player:addAccountMoney(account, amount, reason)
+	local caller = cfx.caller.createFrameworkCaller({
+		["ESX"] = function()
+			---@type ExtendedPlayer
+			local xPlayer = self.frameworkPlayer
+			xPlayer.addAccountMoney(account, amount, reason or "")
+		end,
+		["QB"] = function()
+			local player = self.frameworkPlayer
+			local moneyType = account == "money" and "cash" or "bank"
+			player.Functions.AddMoney(moneyType, amount, reason or "")
+		end
+	})
+
+	caller()
+end
+
+---@param name string
+---@param grade number
+function Player:setJob(name, grade)
+	print(name, grade)
+	local caller = cfx.caller.createFrameworkCaller({
+		["ESX"] = function()
+			---@type ExtendedPlayer
+			local xPlayer = self.frameworkPlayer
+			xPlayer.setJob(name, grade)
+		end,
+		["QB"] = function()
+			local player = self.frameworkPlayer
+			player.Functions.SetJob(name, grade)
+		end
+	})
+
+	caller()
 end
 
 function cfx.player.getFromId(source)
-	local caller = cfx.caller.createFrameworkCaller({
-		["ESX"] = getFromId_ESX
-	})
-
-	local player = caller(source)
+	local player = Player:new(source)
 	return player
 end
 

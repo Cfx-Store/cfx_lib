@@ -22,6 +22,7 @@ local targetResourceMap = {
 ---@type { [TargetSystem]: string }
 local inventoryResourceMap = {
 	["ox_inventory"] = "ox_inventory",
+	["qb-inventory"] = "qb-inventory",
 }
 
 ---@generic TSystem
@@ -92,6 +93,13 @@ function cfx.caller.initializeFramework(framework)
 	local resourceName = frameworkResourceMap[framework]
 	if framework == "ESX" then
 		ESX = exports[resourceName]:getSharedObject()
+	elseif framework == "QB" then
+		QB = exports[resourceName]:GetCoreObject()
+
+		local context = IsDuplicityVersion() and "server" or "client"
+		RegisterNetEvent(("QBCore:%s:UpdateObject"):format(context), function()
+			QB = exports[resourceName]:GetCoreObject()
+		end)
 	end
 end
 
@@ -105,20 +113,13 @@ end
 ---@return TFunc
 function cfx.caller.createFrameworkCaller(functions)
 	local framework = cfx.caller.getFramework()
-	local func = nil
-
 	for targetFramework, targetFunc in pairs(functions) do
 		if targetFramework == framework then
-			func = targetFunc
-			break
+			return targetFunc
 		end
 	end
 
-	if func == nil then
-		error(("Framework '%s' is not supported"):format(framework))
-	end
-
-	return func
+	return error(("Framework '%s' is not supported"):format(framework))
 end
 
 ---@generic TFunc : function

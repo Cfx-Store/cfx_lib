@@ -1,30 +1,20 @@
 cfx.inventory = {}
 
--------------
--- addItem --
--------------
-
-local function addItem_ox(source, item, count)
-	exports.ox_inventory:AddItem(source, item, count)
-end
-
 ---@param source number
 ---@param item string
 ---@param count? number
 function cfx.inventory.addItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
-		["ox_inventory"] = addItem_ox,
+		["ox_inventory"] = function()
+			exports.ox_inventory:AddItem(source, item, count or 1)
+		end,
+		["qb-inventory"] = function()
+			local player = cfx.player.getFromId(source)
+			player.frameworkPlayer.Functions.AddItem(item, count or 1)
+		end
 	})
 
-	return caller(source, item, count or 1)
-end
-
-----------------
--- removeItem --
-----------------
-
-local function removeItem_ox(source, item, count)
-	exports.ox_inventory:RemoveItem(source, item, count)
+	return caller()
 end
 
 ---@param source number
@@ -32,49 +22,49 @@ end
 ---@param count? number
 function cfx.inventory.removeItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
-		["ox_inventory"] = removeItem_ox,
+		["ox_inventory"] = function()
+			exports.ox_inventory:RemoveItem(source, item, count or 1)
+		end,
+		["qb-inventory"] = function()
+			local player = cfx.player.getFromId(source)
+			player.frameworkPlayer.Functions.RemoveItem(item, count or 1)
+		end
 	})
 
-	return caller(source, item, count or 1)
-end
-
-------------------
--- getItemCount --
-------------------
-
-local function getItemCount_ox(source, item)
-	local result = exports.ox_inventory:Search(source, 'count', item)
-	return result
+	return caller()
 end
 
 ---@param source number
 ---@param item string
 function cfx.inventory.getItemCount(source, item)
 	local caller = cfx.caller.createInventoryCaller({
-		["ox_inventory"] = getItemCount_ox,
+		["ox_inventory"] = function()
+			return exports.ox_inventory:Search(source, 'count', item)
+		end,
+		["qb-inventory"] = function()
+			local player = cfx.player.getFromId(source)
+			return #player.frameworkPlayer.Functions.GetItemByName(item)
+		end
 	})
 
-	return caller(source, item)
-end
-
--------------
--- hasItem --
--------------
-
-local function hasItem_ox(source, item, count)
-	local result = cfx.inventory.getItemCount(source, item)
-	return result >= count
+	return caller()
 end
 
 ---@param source number
 ---@param item string
 ---@param count? number
+-- TODO: Create a better way without copy pasta
 function cfx.inventory.hasItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
-		["ox_inventory"] = hasItem_ox,
+		["ox_inventory"] = function()
+			return cfx.inventory.getItemCount(source, item) >= (count or 1)
+		end,
+		["qb-inventory"] = function()
+			return cfx.inventory.getItemCount(source, item) >= (count or 1)
+		end
 	})
 
-	return caller(source, item, count or 1)
+	return caller()
 end
 
 return cfx.inventory
