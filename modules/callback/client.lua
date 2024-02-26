@@ -100,7 +100,11 @@ function cfx.callback.register(name, cb)
 end
 
 if SharedConfig.debug then
-	RegisterCommand("cfx_callback", function(source)
-		cfx.callback.await("cfx_lib:test", source, "test")
+	cfx.callback.register("cfx_lib:test", function(source, ...)
+		print("cfx_lib:test", source, ...)
+	end)
+
+	RegisterCommand("cfx_callback_cl", function(source)
+		cfx.callback.await("cfx_lib:test", false, "test")
 	end)
 end

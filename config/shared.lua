@@ -2,6 +2,7 @@ SharedConfig = {}
 
 -- WARNING!!! DONT touch this
 SharedConfig.debug = true
+SharedConfig.logLevel = 3
 
 SharedConfig.primaryIdentifier = "license"
 

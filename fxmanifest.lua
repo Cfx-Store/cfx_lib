@@ -20,3 +20,7 @@ shared_scripts {
 	"config/*.lua",
 	"modules/**/shared.lua",
 }
+
+files {
+	"import.lua",
+}
