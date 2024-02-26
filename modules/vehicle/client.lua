@@ -158,3 +158,5 @@ function cfx.vehicle.getProperties(vehicle)
 		modLightbar = GetVehicleMod(vehicle, 49)
 	}
 end
+
+return cfx.vehicle

@@ -1,5 +1,3 @@
-cfx.callback = {}
-
 local events = {}
 local cbEvent = ('__cfx_cb_%s')
 
@@ -80,12 +78,4 @@ function cfx.callback.register(name, cb)
 	end)
 end
 
-if SharedConfig.debug then
-	cfx.callback.register("cfx_lib:test", function(source, ...)
-		print("cfx_lib:test", source, ...)
-	end)
-
-	RegisterCommand("cfx_callback_sv", function(source)
-		cfx.callback.await("cfx_lib:test2", source, "test")
-	end)
-end
+return cfx.callback

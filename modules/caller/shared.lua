@@ -141,3 +141,5 @@ function cfx.caller.createInventoryCaller(functions)
 
 	return func
 end
+
+return cfx.caller

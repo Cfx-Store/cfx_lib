@@ -1,5 +1,3 @@
-cfx.logger = {}
-
 local levels = {
 	"^1[ERROR]",
 	"^3[WARN]",
@@ -8,9 +6,9 @@ local levels = {
 }
 
 local function log(level, ...)
-	if level > SharedConfig.logLevel then
-		return
-	end
+	-- if level > SharedConfig.logLevel then
+	-- 	return
+	-- end
 
 	local args = { ... }
 	for i = 1, #args do
@@ -21,7 +19,7 @@ local function log(level, ...)
 		}) or tostring(arg)
 	end
 
-	print(("[%s] %s %s^7"):format(cfx.cache.resource, levels[level], table.concat(args, " ")))
+	print(("^8[%s] %s %s^7"):format(cfx.cache.resource, levels[level], table.concat(args, " ")))
 end
 
 cfx.logger = {
@@ -30,3 +28,5 @@ cfx.logger = {
 	info = function(...) log(3, ...) end,
 	debug = function(...) log(4, ...) end,
 }
+
+return cfx.logger

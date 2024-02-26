@@ -13,3 +13,5 @@ function cfx.math.trim(value)
 
 	return string.match(value, "^%s*(.-)%s*$")
 end
+
+return cfx.math

@@ -77,28 +77,4 @@ function cfx.inventory.hasItem(source, item, count)
 	return caller(source, item, count or 1)
 end
 
------------
--- debug --
------------
-
-if SharedConfig.debug then
-	RegisterCommand("cfx_addItem", function(source, args)
-		local item = args[1]
-		cfx.inventory.addItem(source, item)
-	end)
-
-	RegisterCommand("cfx_removeItem", function(source, args)
-		local item = args[1]
-		cfx.inventory.removeItem(source, item)
-	end)
-
-	RegisterCommand("cfx_itemCount", function(source, args)
-		local item = args[1]
-		print(cfx.inventory.getItemCount(source, item))
-	end)
-
-	RegisterCommand("cfx_hasItem", function(source, args)
-		local item = args[1]
-		print(cfx.inventory.hasItem(source, item))
-	end)
-end
+return cfx.inventory
