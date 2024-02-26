@@ -2,7 +2,7 @@ local resourceName = GetCurrentResourceName()
 local context = IsDuplicityVersion() and "server" or "client"
 local export = exports["cfx_lib"]
 
-local function loadResourceFile(root, module, context)
+local function loadResourceFile(root, module)
 	local dir = ("%s/%s"):format(root, module)
 	local chunk = LoadResourceFile("cfx_lib", ("%s/%s.lua"):format(dir, context))
 	local shared = LoadResourceFile("cfx_lib", ("%s/shared.lua"):format(dir))
@@ -16,9 +16,9 @@ local function loadConfig()
 end
 
 local function loadModule(self, module)
-	local dir, chunk, shared = loadResourceFile("modules", module, context)
+	local dir, chunk, shared = loadResourceFile("modules", module)
 	if not chunk and not shared then
-		dir, chunk, shared = loadResourceFile("wrappers", module, context)
+		dir, chunk, shared = loadResourceFile("wrappers", module)
 	end
 
 	local sharedConfig = loadConfig()
