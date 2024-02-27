@@ -1,6 +1,7 @@
 cfx.caller = {}
 
 ESX = nil
+QBCore = nil
 
 local cachedFramework = nil
 local cachedInventory = nil
@@ -53,6 +54,12 @@ function cfx.caller.getSystem(system, map)
 	return nil
 end
 
+function cfx.caller.initialize()
+	if not cachedFramework then cfx.caller.getFramework() end
+	if not cachedInventory then cfx.caller.getInventory() end
+	if not cachedTarget then cfx.caller.getTarget() end
+end
+
 function cfx.caller.getFramework()
 	if cachedFramework then
 		return cachedFramework
@@ -81,7 +88,6 @@ function cfx.caller.getInventory()
 		return cachedInventory
 	end
 
-	---@type InventorySystem
 	local inventory = cfx.caller.getSystem(SharedConfig.inventory, inventoryResourceMap)
 	cachedInventory = inventory
 
@@ -93,14 +99,17 @@ function cfx.caller.initializeFramework(framework)
 	cachedFramework = framework
 
 	local resourceName = frameworkResourceMap[framework]
+	cfx.logger.info(("Detected framework: %s (%s)"):format(framework, resourceName))
+
 	if framework == "ESX" then
 		ESX = exports[resourceName]:getSharedObject()
 	elseif framework == "QB" then
-		QB = exports[resourceName]:GetCoreObject()
+		QBCore = exports[resourceName]:GetCoreObject()
+		print(QBCore)
 
 		local context = IsDuplicityVersion() and "server" or "client"
 		RegisterNetEvent(("QBCore:%s:UpdateObject"):format(context), function()
-			QB = exports[resourceName]:GetCoreObject()
+			QBCore = exports[resourceName]:GetCoreObject()
 		end)
 	end
 end
@@ -114,6 +123,8 @@ end
 ---@param functions { [Framework]: TFunc }
 ---@return TFunc
 function cfx.caller.createFrameworkCaller(functions)
+	cfx.caller.initialize()
+
 	local framework = cfx.caller.getFramework()
 	for targetFramework, targetFunc in pairs(functions) do
 		if targetFramework == framework then
@@ -128,6 +139,8 @@ end
 ---@param functions { [InventorySystem]: TFunc }
 ---@return TFunc
 function cfx.caller.createInventoryCaller(functions)
+	cfx.caller.initialize()
+
 	local inventory = cfx.caller.getInventory()
 	local func = nil
 

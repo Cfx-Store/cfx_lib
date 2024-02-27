@@ -26,7 +26,7 @@ function Player:new(source)
 			return ESX.GetPlayerFromId(source)
 		end,
 		["QB"] = function()
-			return QB.Functions.GetPlayer(source)
+			return QBCore.Functions.GetPlayer(source)
 		end
 	})
 

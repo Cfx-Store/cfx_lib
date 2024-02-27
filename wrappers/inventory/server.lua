@@ -30,7 +30,7 @@ function cfx.inventory.addItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
 		["ox_inventory"] = addItem_ox,
 		["es_extended"] = addItem_esx,
-		["qb-core"] = addItem_qb,
+		["qb-inventory"] = addItem_qb,
 		["qs-inventory"] = addItem_qs
 	})
 
@@ -46,16 +46,14 @@ local function removeItem_ox(source, item, count)
 end
 
 local function removeItem_qb(source, item, count)
-	local Player = QBCore.Functions.GetPlayer(source)
-
-	Player.Functions.RemoveItem(item, count)
+	local player = QBCore.Functions.GetPlayer(source)
+	player.Functions.RemoveItem(item, count)
 end
 
 local function removeItem_esx(source, item, count)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	xPlayer.removeInventoryItem(item, count)
 end
-
 
 local function removeItem_qs(source, item, count)
 	exports['qs-inventory']:RemoveItem(source, item, count)
@@ -68,7 +66,7 @@ function cfx.inventory.removeItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
 		["ox_inventory"] = removeItem_ox,
 		["es_extended"] = removeItem_esx,
-		["qb-core"] = removeItem_qb,
+		["qb-inventory"] = removeItem_qb,
 		["qs-inventory"] = removeItem_qs,
 	})
 
@@ -92,14 +90,10 @@ local function getItemCount_esx(source, item)
 end
 
 local function getItemCount_qb(source, item)
-	local Player = QBCore.Functions.GetPlayer(source)
-	local result = Player.Functions.GetItemByName(item)
+	local player = QBCore.Functions.GetPlayer(source)
+	local result = player.Functions.GetItemByName(item)
 
-	if not result then
-		return 0
-	end
-
-	return result.amount
+	return result?.amount
 end
 
 local function getItemCount_qs(source, item)
@@ -119,7 +113,7 @@ function cfx.inventory.getItemCount(source, item)
 	local caller = cfx.caller.createInventoryCaller({
 		["ox_inventory"] = getItemCount_ox,
 		["es_extended"] = getItemCount_esx,
-		["qb-core"] = getItemCount_qb,
+		["qb-inventory"] = getItemCount_qb,
 		["qs-inventory"] = getItemCount_qs,
 	})
 
@@ -142,7 +136,7 @@ function cfx.inventory.hasItem(source, item, count)
 	local caller = cfx.caller.createInventoryCaller({
 		["ox_inventory"] = hasItem,
 		["es_extended"] = hasItem,
-		["qb-core"] = hasItem,
+		["qb-inventory"] = hasItem,
 		["qs-inventory"] = hasItem,
 	})
 
