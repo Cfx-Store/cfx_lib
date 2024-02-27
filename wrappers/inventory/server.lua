@@ -19,6 +19,10 @@ local function addItem_qb(source, item, count)
 	Player.Functions.AddItem(item, count)
 end
 
+local function addItem_qs(source, item, count)
+	exports['qs-inventory']:AddItem(source, item, count)
+end
+
 
 ---@param source number
 ---@param item string
@@ -28,6 +32,7 @@ function cfx.inventory.addItem(source, item, count)
 		["ox_inventory"] = addItem_ox,
 		["es_extended"] = addItem_esx,
 		["qb-core"] = addItem_qb,
+		["qs-inventory"] = addItem_qs
 	})
 
 	return caller(source, item, count or 1)
@@ -53,6 +58,11 @@ local function removeItem_esx(source, item, count)
 end
 
 
+local function removeItem_qs(source, item, count)
+	exports['qs-inventory']:RemoveItem(source, item, count)
+end
+
+
 ---@param source number
 ---@param item string
 ---@param count? number
@@ -61,6 +71,7 @@ function cfx.inventory.removeItem(source, item, count)
 		["ox_inventory"] = removeItem_ox,
 		["es_extended"] = removeItem_esx,
 		["qb-core"] = removeItem_qb,
+		["qs-inventory"] = removeItem_qs,
 	})
 
 	return caller(source, item, count or 1)
@@ -93,6 +104,18 @@ local function getItemCount_qb(source, item)
 	return result.amount
 end
 
+local function getItemCount_qs(source, item)
+	local inventory = exports['qs-inventory']:GetInventory(source)
+
+	for k,v in pairs(inventory) do 
+		if v.name == item then 
+			return v.count
+		end
+	end
+
+	return 0
+end
+
 ---@param source number
 ---@param item string
 function cfx.inventory.getItemCount(source, item)
@@ -100,6 +123,7 @@ function cfx.inventory.getItemCount(source, item)
 		["ox_inventory"] = getItemCount_ox,
 		["es_extended"] = getItemCount_esx,
 		["qb-core"] = getItemCount_qb,
+		["qs-inventory"] = getItemCount_qs,
 	})
 
 	return caller(source, item)
@@ -125,6 +149,17 @@ local function hasItem_esx(source, item, count)
 	return result.count >= count
 end
 
+local function hasItem_qs(source, item)
+	local inventory = exports['qs-inventory']:GetInventory(source)
+
+	for k,v in pairs(inventory) do 
+		if v.name == item then 
+			return true
+		end
+	end
+
+	return false
+end
 local function hasItem_qb(source, item, count)
 	local Player = QBCore.Functions.GetPlayer(source)
 	local result = Player.Functions.GetItemByName(item)
@@ -136,7 +171,6 @@ local function hasItem_qb(source, item, count)
 	return result.amount >= count
 end
 
-
 ---@param source number
 ---@param item string
 ---@param count? number
@@ -145,6 +179,7 @@ function cfx.inventory.hasItem(source, item, count)
 		["ox_inventory"] = hasItem_ox,
 		["es_extended"] = hasItem_esx,
 		["qb-core"] = hasItem_qb,
+		["qs-inventory"] = hasItem_qs,
 	})
 
 	return caller(source, item, count or 1)
