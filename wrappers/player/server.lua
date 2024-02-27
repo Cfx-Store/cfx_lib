@@ -55,17 +55,17 @@ function Player:addAccountMoney(account, amount, reason)
 end
 
 ---@param name string
----@param grade number
+---@param grade? number
 function Player:setJob(name, grade)
 	local caller = cfx.caller.createFrameworkCaller({
 		["ESX"] = function()
 			---@type ExtendedPlayer
 			local xPlayer = self.frameworkPlayer
-			xPlayer.setJob(name, grade)
+			xPlayer.setJob(name, grade or 0)
 		end,
 		["QB"] = function()
 			local player = self.frameworkPlayer
-			player.Functions.SetJob(name, grade)
+			player.Functions.SetJob(name, grade or 0)
 		end
 	})
 
