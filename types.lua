@@ -13,4 +13,10 @@
 
 ---@alias InventorySystem
 ---| '"ox_inventory"'
+---| '"qb-inventory"'
 ---| '"auto"'
+
+
+---@alias AccountType
+---| '"bank"'
+---| '"money"'
