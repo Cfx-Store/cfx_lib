@@ -57,7 +57,6 @@ end
 ---@param name string
 ---@param grade number
 function Player:setJob(name, grade)
-	print(name, grade)
 	local caller = cfx.caller.createFrameworkCaller({
 		["ESX"] = function()
 			---@type ExtendedPlayer

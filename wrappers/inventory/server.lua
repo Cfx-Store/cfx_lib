@@ -19,9 +19,13 @@ local function addItem_qb(source, item, count)
 end
 
 local function addItem_qs(source, item, count)
-	exports['qs-inventory']:AddItem(source, item, count)
-end
+	local caller = cfx.caller.createFrameworkCaller({
+		["ESX"] = addItem_esx,
+		["QB"] = addItem_qb
+	})
 
+	return caller(source, item, count)
+end
 
 ---@param source number
 ---@param item string
@@ -55,8 +59,14 @@ local function removeItem_esx(source, item, count)
 	xPlayer.removeInventoryItem(item, count)
 end
 
+-- QS Inventory also works with the framework istelf
 local function removeItem_qs(source, item, count)
-	exports['qs-inventory']:RemoveItem(source, item, count)
+	local caller = cfx.caller.createFrameworkCaller({
+		["ESX"] = removeItem_esx,
+		["QB"] = removeItem_qb
+	})
+
+	return caller(source, item, count)
 end
 
 ---@param source number
@@ -96,15 +106,14 @@ local function getItemCount_qb(source, item)
 	return result?.amount
 end
 
+-- QS Inventory also works with the framework istelf
 local function getItemCount_qs(source, item)
-	local inventory = exports['qs-inventory']:GetInventory(source)
-	for _, v in pairs(inventory) do
-		if v.name == item then
-			return v.count
-		end
-	end
+	local caller = cfx.caller.createFrameworkCaller({
+		["ESX"] = getItemCount_esx,
+		["QB"] = getItemCount_qb
+	})
 
-	return 0
+	return caller(source, item)
 end
 
 ---@param source number
