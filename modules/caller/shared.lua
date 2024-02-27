@@ -23,6 +23,8 @@ local targetResourceMap = {
 local inventoryResourceMap = {
 	["ox_inventory"] = "ox_inventory",
 	["qb-inventory"] = "qb-inventory",
+	["es_extended"] = "es_extended",
+	["qs-inventory"] = "qs-inventory"
 }
 
 ---@generic TSystem

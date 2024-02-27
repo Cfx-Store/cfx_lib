@@ -14,6 +14,8 @@
 ---@alias InventorySystem
 ---| '"ox_inventory"'
 ---| '"qb-inventory"'
+---| '"es_extended"'
+---| '"qs-inventory"'
 ---| '"auto"'
 
 
