@@ -1,87 +1,106 @@
 cfx.target = {}
 
----@param options TargetOptions
-local function convertOptions(options)
-  options.distance = options.distance or 2.0
+-------------
+-- Options --
+-------------
 
-  local caller = cfx.caller.createTargetCaller({
-    ["ox_target"] = function()
-      ---@type OxTargetOption
-      return {
-        label = options.label,
-        icon = options.icon,
-        canInteract = function(entity)
-          return options.canInteract({
+---@param options TargetOptions
+---@return OxTargetOption
+local function createOptions_ox(options)
+   return {
+      label = options.label,
+      icon = options.icon,
+      canInteract = function(entity)
+         return options.canInteract({
             entity = entity
-          })
-        end,
-        onSelect = function(entity)
-          options.onSelect({
+         })
+      end,
+      onSelect = function(entity)
+         options.onSelect({
             entity = entity
-          })
-        end
-      }
-    end,
-    ["qb-target"] = function()
-      ---@type QbTargetOptions
-      return {
-        options = {
-          {
+         })
+      end
+   }
+end
+
+---@param options TargetOptions
+---@return QbTargetOptions
+local function createOptions_qb(options)
+   return {
+      options = {
+         {
             label = options.label,
             icon = options.icon,
             canInteract = function(entity)
-              return options.canInteract({
-                entity = entity,
-              })
+               return options.canInteract({
+                  entity = entity,
+               })
             end,
             action = function(entity)
-              options.onSelect({
-                entity = entity
-              })
+               options.onSelect({
+                  entity = entity
+               })
             end
-          }
-        }
+         }
       }
-    end,
-    -- ["qtarget"] = function() end,
-  })
+   }
+end
 
-  local options = caller()
-  return options
+---@param options TargetOptions
+local function convertOptions(options)
+   options.distance = options.distance or 2.0
+
+   local caller = cfx.caller.createTargetCaller({
+      ["ox_target"] = createOptions_ox,
+      ["qb-target"] = createOptions_qb,
+      -- ["qtarget"] = function() end,
+   })
+
+   return caller(options)
+end
+
+---------------
+-- Functions --
+---------------
+
+local function addGlobalVehicle_ox(options)
+   exports.ox_target:addGlobalVehicle(options)
+end
+
+local function addGlobalVehicle_qb(options)
+   exports["qb-target"]:AddGlobalVehicle(options)
 end
 
 ---@param options EntityTargetOptions
 function cfx.target.addGlobalVehicle(options)
-  local targetOptions = convertOptions(options)
-  local caller = cfx.caller.createTargetCaller({
-    ["ox_target"] = function()
-      ---@cast targetOptions OxTargetOption
-      exports.ox_target:addGlobalVehicle(targetOptions)
-    end,
-    ["qb-target"] = function()
-      exports["qb-target"]:AddGlobalVehicle(targetOptions)
-    end,
-    -- ["qtarget"] = function() end,
-  })
+   local targetOptions = convertOptions(options)
+   local caller = cfx.caller.createTargetCaller({
+      ["ox_target"] = addGlobalVehicle_ox,
+      ["qb-target"] = addGlobalVehicle_qb,
+      -- ["qtarget"] = function() end,
+   })
 
-  caller()
+   caller(targetOptions)
+end
+
+local function addGlobalPlayer_ox(options)
+   exports.ox_target:addGlobalPlayer(options)
+end
+
+local function addGlobalPlayer_qb(options)
+   exports["qb-target"]:AddGlobalPlayer(options)
 end
 
 ---@param options EntityTargetOptions
 function cfx.target.addGlobalPlayer(options)
-  local targetOptions = convertOptions(options)
-  local caller = cfx.caller.createTargetCaller({
-    ["ox_target"] = function()
-      ---@cast targetOptions OxTargetOption
-      exports.ox_target:addGlobalPlayer(targetOptions)
-    end,
-    ["qb-target"] = function()
-      exports["qb-target"]:AddGlobalPlayer(targetOptions)
-    end,
-    -- ["qtarget"] = function() end,
-  })
+   local targetOptions = convertOptions(options)
+   local caller = cfx.caller.createTargetCaller({
+      ["ox_target"] = addGlobalPlayer_ox,
+      ["qb-target"] = addGlobalPlayer_qb,
+      -- ["qtarget"] = function() end,
+   })
 
-  caller()
+   caller(targetOptions)
 end
 
 return cfx.target
