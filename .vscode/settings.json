@@ -4,5 +4,8 @@
     "action-after-return",
     "err-nonstandard-symbol",
     "lowercase-global"
-  ]
+  ],
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false
 }

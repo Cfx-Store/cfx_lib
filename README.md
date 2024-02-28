@@ -5,6 +5,7 @@ Modules, utilities and wrappers around ESX and QBCore.
 ## Server Wrappers
 
 #### Inventory
+
 - [x] es_extended
 - [x] qb-inventory
 - [x] ox_inventory
@@ -15,12 +16,12 @@ Modules, utilities and wrappers around ESX and QBCore.
 * `cfx.inventory.getItemCount(source: number, item: string)`
 * `cfx.inventory.hasItem(source: number, item: string, count?: number)`
 
-
 #### Player
+
 - [x] es_extended
 - [x] qb-core
 - [ ] vrp
-    
+
 * `cfx.player.getFromId(source: number)`
 * `player:addAccountMoney(account: "bank" | "cash", amount: number, reason?: string)`
 * `player:setJob(name: string, grade: number)`
