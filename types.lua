@@ -3,13 +3,11 @@
 ---| '"QB"'
 ---| '"auto"'
 
-
 ---@alias TargetSystem
 ---| '"ox_target"'
----| '"qb_target"'
+---| '"qb-target"'
 ---| '"qtarget"'
 ---| '"auto"'
-
 
 ---@alias InventorySystem
 ---| '"ox_inventory"'
@@ -31,7 +29,6 @@
 ---@field optional? boolean
 ---@field full? boolean
 
-
 ---@class CommandProperties
 ---@field help string?
 ---@field params CommandParams[]?
@@ -50,3 +47,26 @@
 ---@field timestamp? number|osdate
 ---@field color? number
 ---@field fields? { name: string, value: string, inline: boolean }[]
+
+---@class QbTargetOptions
+---@field options QbTargetOption[]
+---@field distance? number
+
+---@class QbTargetOption
+---@field label string
+---@field icon? string
+---@field action? fun(entity: number)
+---@field canInteract? fun(entity: number, distance: number, data: table): boolean
+
+
+---@class TargetOptions
+---@field label string
+---@field icon? string
+---@field distance? number
+---@field onSelect fun(data: table)
+---@field canInteract fun(data: table): boolean
+
+
+---@class EntityTargetOptions : TargetOptions
+---@field onSelect fun(data: { entity: number })
+---@field canInteract fun(data: { entity: number }): boolean

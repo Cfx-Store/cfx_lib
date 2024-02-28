@@ -19,7 +19,7 @@ local function log(level, ...)
 		}) or tostring(arg)
 	end
 
-	print(("^8[%s] %s %s^7"):format(cfx.cache.resource, levels[level], table.concat(args, " ")))
+	print(("^8%s ^7%s^7"):format(levels[level], table.concat(args, " ")))
 end
 
 cfx.logger = {

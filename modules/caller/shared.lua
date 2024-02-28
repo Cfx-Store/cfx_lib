@@ -13,19 +13,19 @@ local frameworkResourceMap = {
 	["QB"] = "qb-core"
 }
 
----@type { [TargetSystem]: string }
-local targetResourceMap = {
-	["ox_target"] = "ox_target",
-	["qb_target"] = "qb_target",
-	["qtarget"] = "qtarget"
-}
-
----@type { [TargetSystem]: string }
+---@type { [InventorySystem]: string }
 local inventoryResourceMap = {
 	["ox_inventory"] = "ox_inventory",
 	["qb-inventory"] = "qb-inventory",
 	["es_extended"] = "es_extended",
 	["qs-inventory"] = "qs-inventory"
+}
+
+---@type { [TargetSystem]: string }
+local targetResourceMap = {
+	["ox_target"] = "ox_target",
+	["qb-target"] = "qb-target",
+	["qtarget"] = "qtarget"
 }
 
 ---@generic TSystem
@@ -43,7 +43,8 @@ function cfx.caller.getSystem(system, map)
 
 	for system, resourceName in pairs(map) do
 		if cfx.caller.isResourceStarted(resourceName) then
-			if resourceName == "qtarget" and cfx.caller.isResourceStarted("ox_target") then
+			-- Because ox_target has an alias for qtarget and qb-target
+			if cfx.caller.isResourceStarted("ox_target") then
 				return "ox_target"
 			end
 
@@ -68,19 +69,9 @@ function cfx.caller.getFramework()
 	---@type Framework
 	local framework = cfx.caller.getSystem(SharedConfig.framework, frameworkResourceMap)
 	cfx.caller.initializeFramework(framework)
+	cfx.logger.debug("Detected framework", framework)
 
 	return framework
-end
-
-function cfx.caller.getTarget()
-	if cachedTarget then
-		return cachedTarget
-	end
-
-	local target = cfx.caller.getSystem(SharedConfig.target, targetResourceMap)
-	cachedTarget = target
-
-	return target
 end
 
 function cfx.caller.getInventory()
@@ -89,9 +80,22 @@ function cfx.caller.getInventory()
 	end
 
 	local inventory = cfx.caller.getSystem(SharedConfig.inventory, inventoryResourceMap)
+	cfx.logger.debug("Detected inventory", inventory)
 	cachedInventory = inventory
 
 	return inventory
+end
+
+function cfx.caller.getTarget()
+	if cachedTarget then
+		return cachedTarget
+	end
+
+	local target = cfx.caller.getSystem(SharedConfig.target, targetResourceMap)
+	cfx.logger.debug("Detected target", target)
+	cachedTarget = target
+
+	return target
 end
 
 ---@param framework Framework
@@ -99,13 +103,12 @@ function cfx.caller.initializeFramework(framework)
 	cachedFramework = framework
 
 	local resourceName = frameworkResourceMap[framework]
-	cfx.logger.info(("Detected framework: %s (%s)"):format(framework, resourceName))
+	-- cfx.logger.info(("Detected framework: %s (%s)"):format(framework, resourceName))
 
 	if framework == "ESX" then
 		ESX = exports[resourceName]:getSharedObject()
 	elseif framework == "QB" then
 		QBCore = exports[resourceName]:GetCoreObject()
-		print(QBCore)
 
 		local context = IsDuplicityVersion() and "server" or "client"
 		RegisterNetEvent(("QBCore:%s:UpdateObject"):format(context), function()
@@ -116,8 +119,10 @@ end
 
 function cfx.caller.isResourceStarted(resourceName)
 	local state = GetResourceState(resourceName)
-	return state == "started" or state == "starting"
+	return state == "started"
 end
+
+-- TODO: Make this cleaner :-(
 
 ---@generic TFunc : function
 ---@param functions { [Framework]: TFunc }
@@ -153,6 +158,29 @@ function cfx.caller.createInventoryCaller(functions)
 
 	if func == nil then
 		error(("Inventory '%s' is not supported"):format(inventory))
+	end
+
+	return func
+end
+
+---@generic TFunc : function
+---@param functions { [TargetSystem]: TFunc }
+---@return TFunc
+function cfx.caller.createTargetCaller(functions)
+	cfx.caller.initialize()
+
+	local target = cfx.caller.getTarget()
+	local func = nil
+
+	for targetTarget, targetFunc in pairs(functions) do
+		if targetTarget == target then
+			func = targetFunc
+			break
+		end
+	end
+
+	if func == nil then
+		error(("Inventory '%s' is not supported"):format(target))
 	end
 
 	return func
