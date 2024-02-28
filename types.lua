@@ -22,6 +22,14 @@
 ---| '"money"'
 
 
+---@class SharedConfig
+---@field primaryIdentifier "license" | "steam" | "discord" | "fivem"
+---@field framework Framework
+---@field target TargetSystem
+---@field inventory InventorySystem
+---@field debug boolean
+
+
 ---@class CommandParams
 ---@field name string
 ---@field help? string
