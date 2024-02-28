@@ -1,6 +1,6 @@
 # CFX Lib
 
-Modules, utilities and wrappers around ESX and QBCore.
+Modules, utilities, and wrappers around ESX and QBCore.
 
 ## Server Wrappers
 
@@ -10,6 +10,8 @@ Modules, utilities and wrappers around ESX and QBCore.
 - [x] qb-inventory
 - [x] ox_inventory
 - [x] qs-inventory
+
+#### Functions
 
 * `cfx.inventory.addItem(source: number, item: string, count?: number)`
 * `cfx.inventory.removeItem(source: number, item: string, count?: number)`
@@ -22,6 +24,8 @@ Modules, utilities and wrappers around ESX and QBCore.
 - [x] qb-core
 - [ ] vrp
 
+#### Functions
+
 * `cfx.player.getFromId(source: number)`
 * `player:addAccountMoney(account: "bank" | "cash", amount: number, reason?: string)`
 * `player:setJob(name: string, grade: number)`
@@ -33,11 +37,10 @@ Modules, utilities and wrappers around ESX and QBCore.
 - [x] ox_target
 - [x] qb-target 
 
-##### Options
+#### Options
 
 **TargetOptions**
 ```lua
-TargetOptions
 label string
 icon? string
 distance? number
