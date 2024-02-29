@@ -44,10 +44,10 @@ Modules, utilities, and wrappers around ESX and QBCore.
 
 `TargetOptions`:
 
-```lua
-label string
-icon? string
-distance? number
+```kotlin
+label: string
+icon?: string
+distance?: number
 onSelect fun(data: table)
 canInteract fun(data: table): boolean
 ```
