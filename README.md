@@ -36,10 +36,13 @@ Modules, utilities, and wrappers around ESX and QBCore.
 
 - [x] ox_target
 - [x] qb-target
+- [ ] qtarget
 
 #### Options
 
-**TargetOptions**
+#### Structures
+
+`TargetOptions`:
 
 ```lua
 label string
@@ -49,18 +52,20 @@ onSelect fun(data: table)
 canInteract fun(data: table): boolean
 ```
 
-**EntityTargetOptions : TargetOptions**
+`EntityTargetOptions : TargetOptions`:
 
 ```lua
 onSelect fun(data: { entity: number })
 canInteract fun(data: { entity: number }): boolean
 ```
 
-- [x] `cfx.target.addGlobalVehicle(options)`
-- [x] `cfx.target.addGlobalPlayer(options)`
-- [x] `cfx.target.addGlobalPed(options)`
-- [x] `cfx.target.removeGlobalVehicle(options)`
-- [x] `cfx.target.removeGlobalPlayer(options)`
-- [x] `cfx.target.removeGlobalPed(options)`
-- [x] `cfx.target.addModel(models, options)`
-- [x] `cfx.target.removeModel(options)`
+#### Functions
+
+- `cfx.target.addGlobalVehicle(options)`
+- `cfx.target.addGlobalPlayer(options)`
+- `cfx.target.addGlobalPed(options)`
+- `cfx.target.removeGlobalVehicle(options)`
+- `cfx.target.removeGlobalPlayer(options)`
+- `cfx.target.removeGlobalPed(options)`
+- `cfx.target.addModel(models, options)`
+- `cfx.target.removeModel(options)`
