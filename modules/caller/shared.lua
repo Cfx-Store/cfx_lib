@@ -165,16 +165,18 @@ end
 
 ---@generic TFunc : function
 ---@param functions { [TargetSystem]: TFunc }
----@return TFunc
+---@return TFunc, TargetSystem
 function cfx.caller.createTargetCaller(functions)
    cfx.caller.initialize()
 
    local target = cfx.caller.getTarget()
    local func = nil
+   local system
 
    for targetTarget, targetFunc in pairs(functions) do
       if targetTarget == target then
          func = targetFunc
+         system = targetTarget
          break
       end
    end
@@ -183,7 +185,7 @@ function cfx.caller.createTargetCaller(functions)
       error(("Inventory '%s' is not supported"):format(target))
    end
 
-   return func
+   return func, system
 end
 
 return cfx.caller

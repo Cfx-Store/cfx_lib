@@ -69,6 +69,7 @@
 
 ---@class TargetOptions
 ---@field label string
+---@field name string
 ---@field icon? string
 ---@field distance? number
 ---@field onSelect fun(data: table)
