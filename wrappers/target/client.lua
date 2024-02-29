@@ -43,7 +43,8 @@ local function createOptions_qb(options)
                })
             end
          }
-      }
+      },
+      distance = options.distance
    }
 end
 
